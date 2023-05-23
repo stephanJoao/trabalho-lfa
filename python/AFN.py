@@ -1,14 +1,16 @@
 import xml.etree.ElementTree as ET
 
-import AFD
+from ConjuntoSimbolo import ConjuntoSimbolo
+from ConjuntoEstados import ConjuntoEstados
+from ConjuntoTransicaoN import ConjuntoTransicaoN
 
 class AFN:
-    def __init__(self, simbolos, estados, funcaoPrograma, estadoInicial, estadosFinais):
-        self.simbolos = simbolos
-        self.estados = estados
-        self.funcaoPrograma = funcaoPrograma
+    def __init__(self, simbolos=None, estados=None, funcaoPrograma=None, estadoInicial=None, estadosFinais=None):
+        self.simbolos = simbolos.clonar() if simbolos is not None else ConjuntoSimbolo()
+        self.estados = estados.clonar if estados is not None else ConjuntoEstados()
+        self.funcaoPrograma = funcaoPrograma.clonar() if funcaoPrograma is not None else ConjuntoTransicaoN()
         self.estadoInicial = estadoInicial
-        self.estadosFinais = estadosFinais
+        self.estadosFinais = estadosFinais.clonar() if estadosFinais is not None else ConjuntoEstados()
 
     def getEstadoInicial(self):
         return self.estadoInicial
@@ -45,7 +47,6 @@ class AFN:
         for t in fp:
             if t.getOrigem() == e and t.getSimbolo() == s:
                 return t.getDestino()
-        
         return set()
 
     def pe(self, e, p):
@@ -64,9 +65,8 @@ class AFN:
         for e in self.pe(cestadoInicial, p):
             if e in cestadoFinal:
                 return True
-        
         return False
-    
+
     def toAFD(self):
         novoCsi = self.getSimbolos()
         novoCe = set()

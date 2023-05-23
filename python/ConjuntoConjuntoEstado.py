@@ -1,4 +1,4 @@
-import python.ConjuntoEstados as ConjuntoEstados
+from ConjuntoEstados import ConjuntoEstados
 
 class ConjuntoConjuntoEstados:
     def __init__(self):

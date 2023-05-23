@@ -1,8 +1,6 @@
 class Simbolo:
-
     def __init__(self, simbolo=None):
         self.simbolo = simbolo
-        self.vazia = 'E' # VE ESSA MERDA DEPOIS
 
     def getSimbolo(self):
         return self.simbolo
@@ -19,4 +17,4 @@ class Simbolo:
         return self.getSimbolo() == simbolo.getSimbolo()
 
     def __str__(self):
-        return str(self.getSimbolo())
+        return self.getSimbolo()
