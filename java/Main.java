@@ -27,6 +27,6 @@ public class Main
                System.out.println(("AFD M' = " + a.toAFD()).toString());
         } catch (Exception e){
                System.out.println(e);
-        }     
+    	}     
     }
 }
