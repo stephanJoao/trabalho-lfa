@@ -15,11 +15,11 @@
   </estadosFinais>
 
   <funcaoPrograma>
-    <elemento origem="q0"  destino="q1" simbolo="a"/>
-    <elemento origem="q1"  destino="q1" simbolo="a"/>
-    <elemento origem="q1"  destino="q2" simbolo="b"/>
-    <elemento origem="q2"  destino="q2" simbolo="b"/>
-    <elemento origem="q2"  destino="q1" simbolo="a"/>
+    <elemento origem="q0" destino="q1" simbolo="a"/>
+    <elemento origem="q1" destino="q1" simbolo="a"/>
+    <elemento origem="q1" destino="q2" simbolo="b"/>
+    <elemento origem="q2" destino="q2" simbolo="b"/>
+    <elemento origem="q2" destino="q1" simbolo="a"/>
   </funcaoPrograma>
 
   <estadoInicial valor= "q0"/>

@@ -87,3 +87,13 @@ class AFD:
             if initial_state is not None:
                 afd.set_initial_state(initial_state)
         return afd
+    
+    def quintuple(self):
+        print("M = (A, Q, P, q0, F)")
+        print("A = {" + ", ".join(set([symbol for state in self._states.values() for symbol in state._transitions.keys()])) + "}")
+        print("Q = {" + ", ".join(self._states.keys()) + "}")
+        for state in self._states.values():
+            for symbol, dst in state._transitions.items():
+                print("P(" + state._label + ", " + symbol + ") = " + dst._label)
+        print("q0 = " + self._initial_state._label)
+        print("F = {" + ", ".join([state._label for state in self._states.values() if state._is_final]) + "}")

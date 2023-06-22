@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as XMLElementTree
 
 class AFNState:
-    def __init__(self, label: str, is_final = True):
+    def __init__(self, label: str, is_final = False):
         self._label = label
         self._transitions = {}
         self._is_final = is_final
@@ -99,3 +99,13 @@ class AFN:
             if initial_state is not None:
                 afn.set_initial_state(initial_state)
         return afn 
+    
+    def quintuple(self):
+        print("M = (A, Q, P, q0, F)")
+        print("A = {" + ", ".join(set([symbol for state in self._states.values() for symbol in state._transitions.keys()])) + "}")
+        print("Q = {" + ", ".join(self._states.keys()) + "}")
+        for state in self._states.values():
+            for symbol, dst in state._transitions.items():
+                print("P(" + state._label + ", " + symbol + ") = " + ", ".join([d._label for d in dst]))
+        print("q0 = " + self._initial_state._label)
+        print("F = {" + ", ".join([state._label for state in self._states.values() if state._is_final]) + "}")

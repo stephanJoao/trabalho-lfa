@@ -17,9 +17,11 @@ def main(argv):
         a = AFN.from_xml(filename)
         
 
+    a.quintuple()
+
     while True:
         line = input('\nEnter the input string: ')
-        if line == '':
+        if line == '	':
             break
         line = line.strip()
         print(f'Input `{line}` is {"" if a.parse(line) else "not "}valid')
