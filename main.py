@@ -1,19 +1,28 @@
-from argparse import ArgumentParser
-from sys import stdin
+import sys
 
 from AFD import AFD
+from AFN import AFN
 
-def main():
-    arg_parser = ArgumentParser(prog='fap', description='Finite automata parser')
-    arg_parser.add_argument('-i', '--ifile', required=True)
+def main(argv):
 
-    args = arg_parser.parse_args()
+    if len(argv) < 2:
+        filename = input('Enter the XML file name: ')
+    else:
+        filename = argv[1]
 
-    afd = AFD.from_xml(args.ifile)
+    afd = input('Is the automaton deterministic? (y/n): ')
+    if afd == 'y':
+        a = AFD.from_xml(filename)
+    else:
+        a = AFN.from_xml(filename)
+        
 
-    for line in stdin:
+    while True:
+        line = input('\nEnter the input string: ')
+        if line == '':
+            break
         line = line.strip()
-        print(f'Input `{line}` is {"" if afd.parse(line) else "not "}valid')
+        print(f'Input `{line}` is {"" if a.parse(line) else "not "}valid')
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)

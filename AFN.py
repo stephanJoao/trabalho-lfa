@@ -3,8 +3,8 @@ import xml.etree.ElementTree as XMLElementTree
 class AFNState:
     def __init__(self, label: str, is_final = True):
         self._label = label
-        self._is_final = is_final
         self._transitions = {}
+        self._is_final = is_final
 
     def label(self):
         return self._label
@@ -12,7 +12,7 @@ class AFNState:
     def is_final(self) -> bool:
         return self._is_final
 
-    def set_is_final(self, is_final):
+    def set_final(self, is_final):
         self._is_final = is_final
 
     def add_transition(self, symbol: str, state):
@@ -29,8 +29,45 @@ class AFNState:
 
 class AFN:
     def __init__(self):
-        self._initital_state = None
+        self._initial_state = None
         self._states = {}
+
+    def _get_or_create_state(self, label: str):
+        state = self._states.get(label)
+        if state is None:
+            state = AFNState(label)
+            self._states[label] = state
+        return state
+
+    def set_initial_state(self, label: str):
+        self._initial_state = self._get_or_create_state(label)
+
+    def add_final_state(self, label: str):
+        state = self._get_or_create_state(label)
+        state.set_final(True)
+
+    def add_transition(self, origin, symbol, dest):
+        origin = self._get_or_create_state(origin)
+        dest   = self._get_or_create_state(dest)
+        origin.add_transition(symbol, dest)
+
+    def parse(self, input: str) -> bool:
+        if self._initial_state is None:
+            return False
+        
+        states = [self._initial_state]
+        for symbol in input:
+            new_states = []
+            for state in states:
+                new_states += state.transition(symbol)
+            if len(new_states) == 0:
+                return False
+            states = new_states
+
+        for state in states:
+            if state.is_final():
+                return True;
+        return False
 
     @staticmethod
     def from_xml(xml_file_path: str):
@@ -62,42 +99,3 @@ class AFN:
             if initial_state is not None:
                 afn.set_initial_state(initial_state)
         return afn 
-
-    def _get_or_create_state(self, label: str):
-        state = self._states.get(label)
-        if state is None:
-            state = AFNState(label)
-            self._states[label] = state
-        return state
-
-    def set_initial_state(self, state_label: str):
-        state = self._get_or_create_state(state_label)
-        self._initital_state = state
-
-    def add_final_state(self, state_label: str):
-        state = self._get_or_create_state(state_label)
-        state.set_is_final(True)
-
-    def add_transition(self, origin, symbol, dest):
-        origin = self._get_or_create_state(origin)
-        dest   = self._get_or_create_state(dest)
-        origin.add_transition(symbol, dest)
-
-    def parse(self, input: str) -> bool:
-        if self._initital_state is None:
-            return False
-        states = [self._initital_state]
-        for symbol in input:
-            new_states = []
-            for state in states:
-                # NOTE(igolt): eu sei que eu vou esquecer então: o operador
-                # "+" concatena duas listas
-                new_states += state.transition(symbol)
-            if len(new_states) == 0:
-                return False
-            states = new_states
-
-        for state in states:
-            if state.is_final():
-                return True;
-        return False

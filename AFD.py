@@ -6,18 +6,18 @@ class AFDState:
         self._transitions = {}
         self._is_final = is_final
 
-    def add_transtion(self, symbol: str, dst):
-        self._transitions[symbol] = dst
-
     def label(self):
         return self._label
 
-    def is_final(self):
+    def is_final(self) -> bool:
         return self._is_final
 
     def set_final(self, is_final):
         self._is_final = is_final
 
+    def add_transtion(self, symbol: str, dst):
+        self._transitions[symbol] = dst
+        
     def transition(self, symbol: str):
         return self._transitions.get(symbol)
 
@@ -48,22 +48,23 @@ class AFD:
     def parse(self, input: str):
         if self._initial_state is None:
             return False
-
+        
         state = self._initial_state
         for symbol in input:
             state = state.transition(symbol)
             if state is None:
                 return False
+            
         return state.is_final()
 
     @staticmethod
     def from_xml(xml_file_path: str):
-        xml_tree = XMLElementTree.parse(xml_file_path)
-        xml_tree_root = xml_tree.getroot()
+        tree = XMLElementTree.parse(xml_file_path)
+        root = tree.getroot()
 
         afd = AFD();
 
-        transition_function = xml_tree_root.find('funcaoPrograma')
+        transition_function = root.find('funcaoPrograma')
         if transition_function is not None:
             for elem in transition_function.findall('elemento'):
                 origin = elem.get('origem')
@@ -73,14 +74,14 @@ class AFD:
                 if origin is not None and dst is not None and symbol is not None:
                     afd.add_transition(origin, symbol, dst)
 
-        final_states = xml_tree_root.find('estadosFinais')
+        final_states = root.find('estadosFinais')
         if final_states is not None:
             for elem in final_states.findall('elemento'):
                 state_label = elem.get('valor')
                 if state_label is not None:
                     afd.add_final_state(state_label)
 
-        initial_state = xml_tree_root.find('estadoInicial')
+        initial_state = root.find('estadoInicial')
         if initial_state is not None:
             initial_state = initial_state.get('valor')
             if initial_state is not None:
