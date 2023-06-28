@@ -15,7 +15,7 @@ class AFDState:
     def set_final(self, is_final):
         self._is_final = is_final
 
-    def add_transtion(self, symbol: str, dst):
+    def add_transition(self, symbol: str, dst):
         self._transitions[symbol] = dst
         
     def transition(self, symbol: str):
